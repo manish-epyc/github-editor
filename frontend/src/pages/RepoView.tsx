@@ -6,6 +6,13 @@ import Layout from "../components/Layout";
 import FileTreeSidebar from "../components/FileTreeSidebar";
 import LEFT_ARROW from "../assets/left-arrow.svg";
 
+type TreeNode = {
+  name: string;
+  path: string;
+  type: string;
+  children: TreeNode[];
+};
+
 export default function RepoView() {
   const { owner, repo } = useParams();
   const token = sessionStorage.getItem("github_token");
@@ -22,15 +29,13 @@ export default function RepoView() {
     return res.json();
   };
 
-  const { data: repoMeta, isLoading: metaLoading } = useQuery({
+  const { data: repoMeta } = useQuery({
     queryKey: ["repoMeta", owner, repo],
     queryFn: fetchRepoMeta,
     enabled: !!token,
   });
 
-  const treeSha = repoMeta?.default_branch
-    ? repoMeta?.["default_branch"]
-    : undefined;
+  const treeSha = repoMeta?.default_branch;
 
   const fetchFileTree = async () => {
     const branchRes = await fetch(
@@ -51,10 +56,17 @@ export default function RepoView() {
     enabled: !!treeSha,
   });
 
-  const files =
-    treeData?.tree?.filter((item: any) => item.type === "blob") || [];
+  const files: TreeNode[] =
+    treeData?.tree
+      ?.filter((item: any) => item.type === "blob")
+      .map((item: any) => ({
+        name: item.path.split("/").pop() || "",
+        path: item.path,
+        type: item.type,
+        children: [],
+      })) || [];
 
-  const { data: permissionData, isLoading: permissionLoading } = useQuery({
+  const { data: permissionData } = useQuery({
     queryKey: ["permission", owner, repo],
     queryFn: async () => {
       const res = await fetch(
@@ -92,7 +104,7 @@ export default function RepoView() {
           </div>
           {open && (
             <div className="ml-4">
-              {node.children?.map((child) => (
+              {node.children?.map((child: TreeNode) => (
                 <SidebarItem
                   key={child.path}
                   node={child}
@@ -122,7 +134,7 @@ export default function RepoView() {
         <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0">
           <Link to="/repos">
             <div className="flex items-center gap-4 mb-8 text-lg cursor-pointer">
-              <img src={LEFT_ARROW} className="w-5 h-5" /> All Repositories
+              <img src={LEFT_ARROW} className="w-5 h-5" alt="Back" /> All Repositories
             </div>
           </Link>
           <h2 className="text-lg font-semibold mb-2">Files</h2>
@@ -140,7 +152,6 @@ export default function RepoView() {
         {/* Main: Editor Area */}
         <div className="flex-1 p-8">
           <h2 className="text-2xl font-semibold capitalize mb-6">
-            {/* {owner}  */}
             {repo} Repository
           </h2>
 

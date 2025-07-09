@@ -1,12 +1,25 @@
 import { useState, useMemo } from "react";
 import { ChevronRight, ChevronDown, Folder, File } from "lucide-react";
 
-function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
-  const [expandedFolders, setExpandedFolders] = useState(new Set([""]));
+type TreeNode = {
+  name: string;
+  path: string;
+  type: "file" | "folder";
+  children?: TreeNode[];
+};
+
+interface FileTreeSidebarProps {
+  files: TreeNode[];
+  selectedFile: string | null;
+  setSelectedFile: (path: string) => void;
+}
+
+function FileTreeSidebar({ files, selectedFile, setSelectedFile }: FileTreeSidebarProps) {
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([""]));
 
   // Build hierarchical tree structure from flat file list
-  const fileTree = useMemo(() => {
-    const root = { name: "", path: "", type: "folder", children: [] };
+  const fileTree = useMemo<TreeNode[]>(() => {
+    const root: TreeNode = { name: "", path: "", type: "folder", children: [] };
 
     files.forEach((file) => {
       const filePath = typeof file === "string" ? file : file.path;
@@ -29,7 +42,7 @@ function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
             type: "folder",
             children: [],
           };
-          currentNode.children?.push(folderNode);
+          currentNode.children!.push(folderNode);
         }
 
         currentNode = folderNode;
@@ -37,7 +50,7 @@ function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
 
       // Add the file
       const fileName = pathParts[pathParts.length - 1];
-      currentNode.children?.push({
+      currentNode.children!.push({
         name: fileName,
         path: filePath,
         type: "file",
@@ -45,7 +58,7 @@ function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
     });
 
     // Sort children: folders first, then files, both alphabetically
-    const sortChildren = (node) => {
+    const sortChildren = (node: TreeNode) => {
       if (node.children) {
         node.children.sort((a, b) => {
           if (a.type !== b.type) {
@@ -61,7 +74,7 @@ function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
     return root.children || [];
   }, [files]);
 
-  const toggleFolder = (folderPath) => {
+  const toggleFolder = (folderPath: string) => {
     const newExpanded = new Set(expandedFolders);
     if (newExpanded.has(folderPath)) {
       newExpanded.delete(folderPath);
@@ -71,7 +84,7 @@ function FileTreeSidebar({ files, selectedFile, setSelectedFile }) {
     setExpandedFolders(newExpanded);
   };
 
-  const renderNode = (node, level = 0) => {
+  const renderNode = (node: TreeNode, level = 0): JSX.Element => {
     const isFolder = node.type === "folder";
     const isExpanded = expandedFolders.has(node.path);
     const isSelected = selectedFile === node.path;

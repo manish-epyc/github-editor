@@ -2,32 +2,45 @@ import { useQuery } from "@tanstack/react-query";
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
 
+interface FileViewerProps {
+  owner: string;
+  repo: string;
+  path: string;
+  token: string;
+  canEdit: boolean;
+}
+
+interface GitHubFileResponse {
+  name: string;
+  path: string;
+  sha: string;
+  content: string;
+  encoding: string;
+}
+
 export default function FileViewer({
   owner,
   repo,
   path,
   token,
   canEdit,
-}: {
-  owner: string;
-  repo: string;
-  path: string;
-  token: string;
-  canEdit: boolean;
-}) {
+}: FileViewerProps) {
   const [value, setValue] = useState("");
   const [sha, setSha] = useState("");
   const [saving, setSaving] = useState(false);
-  const fetchFile = async () => {
+
+  const fetchFile = async (): Promise<{ name: string }> => {
     const res = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
       {
         headers: { Authorization: `token ${token}` },
       }
     );
-    const data = await res.json();
-    console.log(data);
-    
+
+    if (!res.ok) throw new Error("Failed to fetch file");
+
+    const data: GitHubFileResponse = await res.json();
+
     setValue(atob(data.content));
     setSha(data.sha);
     return { name: data.name };
@@ -44,6 +57,7 @@ export default function FileViewer({
   return (
     <div>
       <h2 className="mb-2 font-semibold">{data?.name}</h2>
+
       <Editor
         height="75vh"
         defaultLanguage="javascript"
