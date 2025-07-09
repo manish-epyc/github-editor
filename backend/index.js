@@ -4,7 +4,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -45,5 +45,5 @@ app.post("/auth/github", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Auth server running → http://localhost:${PORT}`);
+  console.log(`✅ Auth server running on port ${PORT}`);
 });
