@@ -5,13 +5,8 @@ import FileViewer from "../components/FileViewer";
 import Layout from "../components/Layout";
 import FileTreeSidebar from "../components/FileTreeSidebar";
 import LEFT_ARROW from "../assets/left-arrow.svg";
+import type { TreeNode } from "../types/tree";
 
-type TreeNode = {
-  name: string;
-  path: string;
-  type: string;
-  children: TreeNode[];
-};
 
 export default function RepoView() {
   const { owner, repo } = useParams();
@@ -84,48 +79,48 @@ export default function RepoView() {
     permissionData?.permission === "admin" ||
     permissionData?.permission === "write";
 
-  function SidebarItem({
-    node,
-    onSelect,
-  }: {
-    node: TreeNode;
-    onSelect: (path: string) => void;
-  }) {
-    const [open, setOpen] = useState(false);
+  // function SidebarItem({
+  //   node,
+  //   onSelect,
+  // }: {
+  //   node: TreeNode;
+  //   onSelect: (path: string) => void;
+  // }) {
+  //   const [open, setOpen] = useState(false);
 
-    if (node.type === "tree") {
-      return (
-        <div>
-          <div
-            className="cursor-pointer font-medium text-gray-700 hover:text-black"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? "📂" : "📁"} {node.name}
-          </div>
-          {open && (
-            <div className="ml-4">
-              {node.children?.map((child: TreeNode) => (
-                <SidebarItem
-                  key={child.path}
-                  node={child}
-                  onSelect={onSelect}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      );
-    }
+  //   if (node.type === "tree") {
+  //     return (
+  //       <div>
+  //         <div
+  //           className="cursor-pointer font-medium text-gray-700 hover:text-black"
+  //           onClick={() => setOpen(!open)}
+  //         >
+  //           {open ? "📂" : "📁"} {node.name}
+  //         </div>
+  //         {open && (
+  //           <div className="ml-4">
+  //             {node.children?.map((child: TreeNode) => (
+  //               <SidebarItem
+  //                 key={child.path}
+  //                 node={child}
+  //                 onSelect={onSelect}
+  //               />
+  //             ))}
+  //           </div>
+  //         )}
+  //       </div>
+  //     );
+  //   }
 
-    return (
-      <div
-        className="cursor-pointer text-blue-600 hover:underline ml-4"
-        onClick={() => onSelect(node.path)}
-      >
-        📄 {node.name}
-      </div>
-    );
-  }
+  //   return (
+  //     <div
+  //       className="cursor-pointer text-blue-600 hover:underline ml-4"
+  //       onClick={() => onSelect(node.path)}
+  //     >
+  //       📄 {node.name}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex min-h-screen">

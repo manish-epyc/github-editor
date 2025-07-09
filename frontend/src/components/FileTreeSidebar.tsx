@@ -1,12 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, type JSX } from "react";
 import { ChevronRight, ChevronDown, Folder, File } from "lucide-react";
-
-type TreeNode = {
-  name: string;
-  path: string;
-  type: "file" | "folder";
-  children?: TreeNode[];
-};
+import type { TreeNode } from "../types/tree";
 
 interface FileTreeSidebarProps {
   files: TreeNode[];
@@ -14,8 +8,14 @@ interface FileTreeSidebarProps {
   setSelectedFile: (path: string) => void;
 }
 
-function FileTreeSidebar({ files, selectedFile, setSelectedFile }: FileTreeSidebarProps) {
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set([""]));
+function FileTreeSidebar({
+  files,
+  selectedFile,
+  setSelectedFile,
+}: FileTreeSidebarProps) {
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set([""])
+  );
 
   // Build hierarchical tree structure from flat file list
   const fileTree = useMemo<TreeNode[]>(() => {
