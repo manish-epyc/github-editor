@@ -1,18 +1,21 @@
 import GITHUB_LOGO from "../assets/github-logo.svg";
 import LOGO from "../assets/logo.svg";
 import HAND_AND_SHAKE from "../assets/handshake.svg";
+import { useNavigate } from "react-router";
 
 interface LoginProps {
   showMessage?: string;
 }
 
 export default function Login(props: LoginProps) {
+  const navigate = useNavigate();
   const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
   const REDIRECT_URI = `${import.meta.env.VITE_APP_FRONTEND_URL}/dashboard`; // frontend handles the code
 
   const loginWithGitHub = () => {
     const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=repo&redirect_uri=${REDIRECT_URI}`;
-    window.location.href = githubAuthURL;
+    // window.location.href = githubAuthURL;
+    navigate(githubAuthURL);
   };
 
   return (
