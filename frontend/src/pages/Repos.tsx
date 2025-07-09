@@ -31,7 +31,7 @@ export default function Repos() {
 
   return (
     <Layout>
-      <div className="py-8 space-y-6">
+      <div className="py-8 px-4 space-y-6 max-w-7xl mx-auto">
         <h1 className="text-2xl font-bold">Your Repositories</h1>
 
         <div className="flex gap-2">
@@ -53,7 +53,7 @@ export default function Repos() {
         {isLoading && <p>Loading...</p>}
         {error && <p className="text-red-500">Error loading repos</p>}
 
-        <ul className="grid sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           {data?.map((repo: any) => (
             <li
               key={repo.id}
@@ -62,8 +62,8 @@ export default function Repos() {
                 navigate(`/repos/${repo.owner.login}/${repo.name}`)
               }
             >
-              <div className="text-lg font-semibold mb-4 leading-normal">{repo.full_name}</div>
-              <div className="text-sm text-gray-500">
+              <div className="text-lg font-semibold mb-4 leading-normal break-words">{repo.full_name}</div>
+              <div className="text-sm text-gray-500 break-words">
                 {repo.description || "No description"}
               </div>
             </li>

@@ -15,7 +15,7 @@ export default function Dashboard() {
     }
 
     // Exchange the code for an access token via backend
-    fetch("http://localhost:4000/auth/github", {
+    fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/auth/github`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

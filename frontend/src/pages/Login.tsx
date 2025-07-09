@@ -4,7 +4,7 @@ import HAND_AND_SHAKE from "../assets/handshake.svg";
 
 export default function Login(props) {
   const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
-  const REDIRECT_URI = "http://localhost:5173/dashboard"; // frontend handles the code
+  const REDIRECT_URI = `${import.meta.env.VITE_APP_FRONTEND_URL}/dashboard`; // frontend handles the code
 
   const loginWithGitHub = () => {
     const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=repo&redirect_uri=${REDIRECT_URI}`;

@@ -119,7 +119,7 @@ export default function RepoView() {
     <div className="flex min-h-screen">
       <Layout>
         {/* Sidebar: File Tree */}
-        <div className="w-1/3 max-w-80 p-4 overflow-y-auto shadow-md bg-white ">
+        <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0">
           <Link to="/repos">
             <div className="flex items-center gap-4 mb-8 text-lg cursor-pointer">
               <img src={LEFT_ARROW} className="w-5 h-5" /> All Repositories
