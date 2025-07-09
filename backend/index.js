@@ -6,7 +6,15 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+// ✅ Allow CORS only from your frontend domain
+app.use(
+  cors({
+    origin: "https://github-editor-v1.vercel.app", // replace with your deployed frontend
+    methods: ["POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.use(express.json());
 
 app.post("/auth/github", async (req, res) => {
