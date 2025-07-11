@@ -15,6 +15,14 @@ app.use(
   })
 );
 
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // replace with your deployed frontend
+//     methods: ["POST"],
+//     allowedHeaders: ["Content-Type"],
+//   })
+// );
+
 app.use(express.json());
 
 app.post("/auth/github", async (req, res) => {

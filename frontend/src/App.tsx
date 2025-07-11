@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Repos from "./pages/Repos";
 import RepoView from "./pages/RepoView";
+import PublicRepoView from "./pages/PublicRepoView";
+import UserReposView from "./pages/UserReposView";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/repos" element={<Repos />} />
           <Route path="/repos/:owner/:repo" element={<RepoView />} />
+          <Route path="/user/:username" element={<UserReposView />} />
+          <Route path="/public/:owner/:repo" element={<PublicRepoView />} />
         </Routes>
       </BrowserRouter>
     </>
