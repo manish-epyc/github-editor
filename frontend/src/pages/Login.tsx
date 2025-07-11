@@ -16,7 +16,6 @@ export default function Login(props: LoginProps) {
   const navigate = useNavigate();
 
   const loginWithGitHub = () => {
-    // Only request public repository access - no organization access
     const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=public_repo&redirect_uri=${REDIRECT_URI}`;
     window.location.href = githubAuthURL;
   };
@@ -26,7 +25,6 @@ export default function Login(props: LoginProps) {
 
     let owner = "";
     let repo = "";
-    let username = "";
 
     if (openRepo.includes("github.com/")) {
       const match = openRepo.match(/github\.com\/([^\/]+)(?:\/([^\/]+)?)?/);
