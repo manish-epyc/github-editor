@@ -10,14 +10,14 @@ export default function UserReposView() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Debug: Log the username
-  console.log('UserReposView - Username:', username);
+  console.log("UserReposView - Username:", username);
 
   const fetchUserProfile = async () => {
     try {
-      console.log('Fetching profile for:', username);
+      console.log("Fetching profile for:", username);
       const res = await fetch(`https://api.github.com/users/${username}`);
-      console.log('Profile response status:', res.status);
-      
+      console.log("Profile response status:", res.status);
+
       if (!res.ok) {
         if (res.status === 404) {
           throw new Error("User not found");
@@ -25,7 +25,7 @@ export default function UserReposView() {
         if (res.status === 403) {
           // Check if it's rate limit or forbidden
           const errorData = await res.json().catch(() => ({}));
-          if (errorData.message && errorData.message.includes('rate limit')) {
+          if (errorData.message && errorData.message.includes("rate limit")) {
             throw new Error("RATE_LIMIT");
           }
           throw new Error("API rate limit exceeded. Please try again later.");
@@ -33,21 +33,23 @@ export default function UserReposView() {
         throw new Error(`Failed to fetch user profile: ${res.status}`);
       }
       const data = await res.json();
-      console.log('Profile data:', data);
+      console.log("Profile data:", data);
       return data;
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error("Error fetching user profile:", error);
       throw error;
     }
   };
 
   const fetchUserRepos = async () => {
     try {
-      const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
+      const res = await fetch(
+        `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`
+      );
       if (!res.ok) {
         if (res.status === 403) {
           const errorData = await res.json().catch(() => ({}));
-          if (errorData.message && errorData.message.includes('rate limit')) {
+          if (errorData.message && errorData.message.includes("rate limit")) {
             throw new Error("RATE_LIMIT");
           }
           throw new Error("API rate limit exceeded. Please try again later.");
@@ -55,16 +57,20 @@ export default function UserReposView() {
         throw new Error(`Failed to fetch repositories: ${res.status}`);
       }
       const allRepos = await res.json();
-      
+
       // Filter to only show public repositories
       return allRepos.filter((repo: any) => !repo.private);
     } catch (error) {
-      console.error('Error fetching user repos:', error);
+      console.error("Error fetching user repos:", error);
       throw error;
     }
   };
 
-  const { data: userProfile, isLoading: profileLoading, error: profileError } = useQuery({
+  const {
+    data: userProfile,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
     queryKey: ["userProfile", username],
     queryFn: fetchUserProfile,
     retry: (failureCount, error) => {
@@ -75,7 +81,11 @@ export default function UserReposView() {
     retryDelay: 2000,
   });
 
-  const { data: repos, isLoading: reposLoading, error: reposError } = useQuery({
+  const {
+    data: repos,
+    isLoading: reposLoading,
+    error: reposError,
+  } = useQuery({
     queryKey: ["userRepos", username],
     queryFn: fetchUserRepos,
     enabled: !!userProfile, // Only fetch repos after profile is loaded
@@ -88,10 +98,13 @@ export default function UserReposView() {
   });
 
   // Filter repos based on search query
-  const filteredRepos = repos?.filter((repo: any) =>
-    repo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (repo.description && repo.description.toLowerCase().includes(searchQuery.toLowerCase()))
-  ) || [];
+  const filteredRepos =
+    repos?.filter(
+      (repo: any) =>
+        repo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (repo.description &&
+          repo.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    ) || [];
 
   if (profileLoading) {
     return (
@@ -109,13 +122,16 @@ export default function UserReposView() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center max-w-md mx-auto p-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-red-800 mb-2">User Not Found</h2>
+            <h2 className="text-xl font-semibold text-red-800 mb-2">
+              User Not Found
+            </h2>
             <p className="text-red-700 mb-4">
-              The GitHub user "{username}" doesn't exist or their profile is not accessible.
+              The GitHub user "{username}" doesn't exist or their profile is not
+              accessible.
             </p>
-            <Link 
-              to="/" 
-              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            <Link
+              to="/"
+              className="inline-block bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
             >
               Go Back Home
             </Link>
@@ -127,20 +143,18 @@ export default function UserReposView() {
 
   return (
     <Layout>
-      <div className="py-8 px-4 space-y-6 max-w-7xl mx-auto font-sans">
-        {/* Back Navigation */}
+      <div className="py-8 px-4 space-y-6 max-w-7xl mx-auto font-sans w-full">
         <Link to="/">
-          <div className="flex items-center gap-4 text-lg cursor-pointer hover:text-blue-600 mb-6">
-            <img src={LEFT_ARROW} className="w-5 h-5" alt="Back" /> 
+          <div className="flex items-center gap-4 text-lg cursor-pointer hover:text-gray-800 mb-6">
+            <img src={LEFT_ARROW} className="w-5 h-5" alt="Back" />
             Back to Home
           </div>
         </Link>
 
-        {/* User Profile Header */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
           <div className="flex items-start gap-6">
-            <img 
-              src={userProfile?.avatar_url} 
+            <img
+              src={userProfile?.avatar_url}
               alt={`${username}'s avatar`}
               className="w-20 h-20 rounded-full border border-gray-200"
             />
@@ -153,9 +167,13 @@ export default function UserReposView() {
                 <p className="text-gray-700 mb-3">{userProfile.bio}</p>
               )}
               <div className="flex items-center gap-6 text-sm text-gray-600">
-                <span>📍 {userProfile?.location || "Location not specified"}</span>
+                <span>
+                  📍 {userProfile?.location || "Location not specified"}
+                </span>
                 <span>👥 {userProfile?.followers || 0} followers</span>
-                <span>📂 {userProfile?.public_repos || 0} public repositories</span>
+                <span>
+                  📂 {userProfile?.public_repos || 0} public repositories
+                </span>
               </div>
             </div>
           </div>
@@ -192,8 +210,12 @@ export default function UserReposView() {
         {/* Error State */}
         {reposError && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <h3 className="text-red-800 font-semibold mb-2">Error Loading Repositories</h3>
-            <p className="text-red-700">Failed to load repositories for this user.</p>
+            <h3 className="text-red-800 font-semibold mb-2">
+              Error Loading Repositories
+            </h3>
+            <p className="text-red-700">
+              Failed to load repositories for this user.
+            </p>
           </div>
         )}
 
@@ -208,16 +230,17 @@ export default function UserReposView() {
                 </span>
               )}
             </h2>
-            
+
             {filteredRepos.length === 0 ? (
               <div className="text-center py-12">
                 <div className="bg-gray-50 rounded-lg p-8 max-w-md mx-auto">
-                  <h3 className="text-lg font-medium mb-2">No Repositories Found</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    No Repositories Found
+                  </h3>
                   <p className="text-gray-600">
-                    {searchQuery 
+                    {searchQuery
                       ? `No repositories match "${searchQuery}"`
-                      : "This user has no public repositories."
-                    }
+                      : "This user has no public repositories."}
                   </p>
                 </div>
               </div>
@@ -227,9 +250,11 @@ export default function UserReposView() {
                   <div
                     key={repo.id}
                     className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow"
-                    onClick={() => navigate(`/public/${repo.owner.login}/${repo.name}`, {
-                      state: { fromUserRepos: true }
-                    })}
+                    onClick={() =>
+                      navigate(`/public/${repo.owner.login}/${repo.name}`, {
+                        state: { fromUserRepos: true },
+                      })
+                    }
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="text-lg font-semibold text-gray-900 break-words">
@@ -239,11 +264,11 @@ export default function UserReposView() {
                         {repo.fork && "🍴"}
                       </div>
                     </div>
-                    
+
                     <div className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {repo.description || "No description available"}
                     </div>
-                    
+
                     <div className="flex items-center gap-4 text-xs text-gray-500">
                       {repo.language && (
                         <span className="flex items-center gap-1">
@@ -254,7 +279,7 @@ export default function UserReposView() {
                       <span>⭐ {repo.stargazers_count}</span>
                       <span>🍴 {repo.forks_count}</span>
                     </div>
-                    
+
                     <div className="mt-3 text-xs text-gray-500">
                       Updated {new Date(repo.updated_at).toLocaleDateString()}
                     </div>

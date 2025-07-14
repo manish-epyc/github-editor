@@ -195,7 +195,7 @@ export default function FileViewer({
           defaultLanguage={getLanguageFromPath(path)}
           value={value}
           onChange={(val) => setValue(val || "")}
-          theme="vs-dark"
+          theme="light"
           options={{
             readOnly: !canEdit || !isMarkdownFile,
             minimap: { enabled: false },

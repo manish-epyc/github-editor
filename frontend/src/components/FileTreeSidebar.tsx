@@ -110,7 +110,7 @@ function FileTreeSidebar({
                 className="mr-1 text-gray-500 flex-shrink-0"
               />
             )}
-            <Folder size={14} className="mr-2 text-blue-500 flex-shrink-0" />
+            <Folder size={14}  className="mr-2 flex-shrink-0" />
             <span className="text-gray-800 font-medium truncate">
               {node.name}
             </span>
@@ -129,7 +129,7 @@ function FileTreeSidebar({
     return (
       <li
         key={node.path}
-        className={`list-none cursor-pointer text-blue-600 hover:underline flex items-center py-1 text-base ${
+        className={`list-none cursor-pointer text-gray-800 hover:underline flex items-center py-1 text-base ${
           isSelected ? "bg-blue-50 font-medium" : ""
         }`}
         style={{ paddingLeft: `${level * 16 + 16}px` }}
