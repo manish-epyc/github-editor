@@ -128,7 +128,7 @@ export default function RepoView() {
     <div className="flex min-h-screen font-sans">
       <Layout>
         {/* Sidebar: File Tree */}
-        <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0 font-sans">
+        <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0 font-sans shrink-0">
           <Link to="/repos">
             <div className="flex items-center gap-4 mb-8 text-lg cursor-pointer hover:text-gray-600 font-sans">
               <img src={LEFT_ARROW} className="w-5 h-5" alt="Back" /> 

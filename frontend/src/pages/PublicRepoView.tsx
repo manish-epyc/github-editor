@@ -112,7 +112,7 @@ export default function PublicRepoView() {
   return (
     <div className="flex min-h-screen font-sans">
       <Layout>
-        <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0 font-sans">
+        <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0 font-sans shrink-0">
           <div
             onClick={handleBackNavigation}
             className="flex items-center gap-4 mb-8 text-lg cursor-pointer hover:text-gray-800"
