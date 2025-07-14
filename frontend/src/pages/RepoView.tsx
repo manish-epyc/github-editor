@@ -114,7 +114,7 @@ export default function RepoView() {
             </p>
             <Link 
               to="/repos" 
-              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-block bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
               Back to Repositories
             </Link>
@@ -130,14 +130,14 @@ export default function RepoView() {
         {/* Sidebar: File Tree */}
         <div className="w-1/3 max-w-80 p-4 overflow-y-auto border border-gray-300 border-t-0 font-sans">
           <Link to="/repos">
-            <div className="flex items-center gap-4 mb-8 text-lg cursor-pointer hover:text-blue-600 font-sans">
+            <div className="flex items-center gap-4 mb-8 text-lg cursor-pointer hover:text-gray-600 font-sans">
               <img src={LEFT_ARROW} className="w-5 h-5" alt="Back" /> 
               All Repositories
             </div>
           </Link>
           
           <div className="mb-4">
-            <h2 className="text-lg font-semibold mb-1">{repo}</h2>
+            <h2 className="text-lg font-semibold mb-1 capitalize">{repo}</h2>
             <p className="text-sm text-gray-600 mb-2">by {owner}</p>
             {repoMeta?.description && (
               <p className="text-sm text-gray-500 mb-4">{repoMeta.description}</p>
@@ -150,7 +150,7 @@ export default function RepoView() {
           
           {treeLoading ? (
             <div className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
               <span className="text-sm">Loading files...</span>
             </div>
           ) : allFiles.length === 0 ? (
