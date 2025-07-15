@@ -1,5 +1,11 @@
 # ✅ EPYC GitHub Repo Editor — Core TODOs
 
+## Project Link
+
+- [ ] https://github-editor-v1.vercel.app/
+- [ ] https://github-editor-backend.onrender.com/
+
+
 ## 🧩 1. Core Frontend Tech Stack
 
 - [ ] Set up **React** with **TypeScript**
